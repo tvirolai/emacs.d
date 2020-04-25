@@ -33,7 +33,8 @@
 
 (require 'flycheck-clj-kondo)
 
-(load-theme 'doom-gruvbox t)
+;; (load-theme 'doom-gruvbox t)
+(load-theme 'doom-dracula t)
 
 (superword-mode 1)
 
@@ -129,7 +130,7 @@
 
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 ;; (add-hook 'prog-mode-hook #'whitespace-mode)
-(add-hook 'prog-mode-hook #'autopair-mode)
+;; (add-hook 'prog-mode-hook #'autopair-mode)
 
 (setup-input-decode-map)
 
@@ -195,7 +196,7 @@
   (define-key evil-normal-state-map (kbd "§") 'slime-eval-defun))
 
 (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
-(add-hook 'lisp-mode-hook #'linum-mode)
+;; (add-hook 'lisp-mode-hook #'linum-mode)
 (add-hook 'lisp-mode-hook #'paredit-mode)
 (add-hook 'lisp-mode-hook #'flycheck-mode)
 (add-hook 'lisp-mode-hook #'clisp-mappings)
@@ -228,7 +229,7 @@
 ;; Python
 
 (add-hook 'python-mode-hook #'flycheck-mode)
-(add-hook 'python-mode-hook #'linum-mode)
+;; (add-hook 'python-mode-hook #'linum-mode)
 
 ;; ReasonML
 
