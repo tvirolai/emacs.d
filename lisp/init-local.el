@@ -1,6 +1,5 @@
-;;; init-local.el --- Personal configuration -*- lexical-binding: t -*-
-;;; Commentary:
-;;; Code:
+;;; settings.el --- Custom personal settings
+;;
 
 (package-initialize)
 (require 'package)
@@ -13,11 +12,6 @@
 
 (use-package flycheck-clj-kondo
   :ensure t)
-
-(use-package clojure-mode
-  :ensure t
-  :config
-  (require 'flycheck-clj-kondo))
 
 (use-package doom-themes
   :ensure t)
@@ -37,62 +31,26 @@
 (use-package autopair
   :ensure t)
 
-(use-package reason-mode
-  :ensure t)
+(require 'flycheck-clj-kondo)
 
-(use-package json-mode
-  :ensure t)
-
-(use-package neotree
-  :ensure t)
-
-(use-package all-the-icons
-  :ensure t)
-
-(use-package restclient
-  :ensure t
-  :defer t
-  :mode (("\\.http\\'" . restclient-mode))
-  :bind (:map restclient-mode-map
-              ("C-c C-f" . json-mode-beautify)))
-
-(use-package evil-org
-  :ensure t
-  :after org
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme)))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-
-(require 'all-the-icons)
-
-;; On first install
-;; (all-the-icons-install-fonts)
-;; (require 'flycheck-clj-kondo)
-
-(desktop-save-mode-off)
-
-(require 'rust-mode)
-(require 'slime-autoloads)
-(require 'smex)
-
-;; (load-theme 'doom-gruvbox t)
-(load-theme 'doom-dracula t)
+(load-theme 'doom-gruvbox t)
 
 (superword-mode 1)
 
 (add-to-list 'load-path "~/.emacs.d/evil")
+                                        ; (setq evil-disable-insert-state-bindings t)
+(key-chord-mode 1)
 (evil-mode 1)
 (evil-commentary-mode 1)
 (evil-visual-mark-mode 1)
 (prettify-symbols-mode 1)
 
+(require 'slime-autoloads)
+
 (setq inferior-lisp-program "/usr/local/bin/sbcl" ; Steel Bank Common Lisp
       slime-contribs '(slime-fancy))
 
+(require 'smex) ; Not needed if you use package.el
 (smex-initialize)
 
 (global-company-mode)
@@ -118,7 +76,6 @@
   (define-key evil-normal-state-map (kbd "C-j") #'evil-window-down)
   (define-key evil-normal-state-map (kbd "C-k") #'evil-window-up)
   (define-key evil-normal-state-map (kbd "C-l") #'evil-window-right)
-  (define-key evil-normal-state-map (kbd "C-ö") #'neotree-toggle)
   (define-key evil-normal-state-map (kbd "Ö") 'xref-find-definitions)
   (define-key evil-normal-state-map (kbd "ä") #'delete-other-windows)
   (define-key evil-normal-state-map (kbd "C-ä") #'split-window-right)
@@ -160,8 +117,6 @@
 
 (defun setup-global-keys ()
   (global-set-key (kbd "C-M-b") 'ibuffer)
-  (global-set-key (kbd "M-<right>") 'forward-word)
-  (global-set-key (kbd "M-<left>") 'backward-word)
   (global-set-key (kbd "´") 'kill-buffer)
   (global-set-key (kbd "C-M-y") 'reverse-transpose-sexps)
   (global-set-key "\C-x\ \C-r" 'recentf-open-files)
@@ -173,6 +128,8 @@
 (setup-global-keys)
 
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+;; (add-hook 'prog-mode-hook #'whitespace-mode)
+(add-hook 'prog-mode-hook #'autopair-mode)
 
 (setup-input-decode-map)
 
@@ -189,28 +146,30 @@
 
 ;; Restclient settings
 
+(use-package json-mode
+  :ensure t)
+
+(use-package restclient
+  :ensure t
+  :defer t
+  :mode (("\\.http\\'" . restclient-mode))
+  :bind (:map restclient-mode-map
+              ("C-c C-f" . json-mode-beautify)))
+
 (defun restclient-mappings ()
-  (evil-local-set-key 'normal (kbd "§") 'restclient-http-send-current))
+  (define-key evil-normal-state-map (kbd "§") 'restclient-http-send-current))
 
 (add-hook 'restclient-mode-hook 'restclient-mappings)
 
 ;; Clojure settings
 
-(defun clojure-linters ()
-  "Enable clj-kondo linters."
-  (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn
-                                   clojure-cider-kibit clojure-cider-eastwood))
-    (setq flycheck-checkers (cons checker (delq checker flycheck-checkers)))))
-
 (defun clojure-mappings ()
-  (evil-local-set-key 'normal (kbd "°") 'cider-eval-buffer)
-  (evil-local-set-key 'normal (kbd "M-§") 'cider-eval-buffer)
-  (evil-local-set-key 'normal (kbd "§") 'cider-eval-defun-at-point)
-  (evil-local-set-key 'normal (kbd "Ö") 'cider-find-var)
-  (evil-local-set-key 'normal (kbd "q") 'cider-popup-buffer-quit)
-  (evil-local-set-key 'normal (kbd "K") 'cider-doc)
-  (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp)
-  (clojure-linters))
+  (define-key evil-normal-state-map (kbd "°") 'cider-eval-buffer)
+  (define-key evil-normal-state-map (kbd "M-§") 'cider-eval-buffer)
+  (define-key evil-normal-state-map (kbd "§") 'cider-eval-defun-at-point)
+  (define-key evil-normal-state-map (kbd "Ö") 'cider-find-var)
+  (define-key evil-normal-state-map (kbd "q") 'cider-popup-buffer-quit)
+  (define-key evil-normal-state-map (kbd "K") 'cider-doc))
 
 (add-hook 'clojure-mode-hook #'paredit-mode)
 (add-hook 'clojure-mode-hook #'subword-mode)
@@ -221,8 +180,8 @@
 ;; Haskell settings
 
 (defun haskell-mappings ()
-  (evil-local-set-key 'normal (kbd "°") 'haskell-interactive-bring)
-  (evil-local-set-key 'normal (kbd "§") 'haskell-process-load-or-reload))
+  (define-key evil-normal-state-map (kbd "°") 'haskell-interactive-bring)
+  (define-key evil-normal-state-map (kbd "§") 'haskell-process-load-or-reload))
 
 (add-hook 'haskell-mode-hook #'haskell-indent-mode)
 (add-hook 'haskell-mode-hook #'interactive-haskell-mode)
@@ -231,13 +190,12 @@
 ;; Common Lisp settings
 
 (defun clisp-mappings ()
-  (evil-local-set-key 'normal (kbd "°") 'slime-eval-buffer)
-  (evil-local-set-key 'normal (kbd "M-§") 'slime-eval-buffer)
-  (evil-local-set-key 'normal (kbd "§") 'slime-eval-defun)
-  (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp))
+  (define-key evil-normal-state-map (kbd "°") 'slime-eval-buffer)
+  (define-key evil-normal-state-map (kbd "M-§") 'slime-eval-buffer)
+  (define-key evil-normal-state-map (kbd "§") 'slime-eval-defun))
 
 (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
-;; (add-hook 'lisp-mode-hook #'linum-mode)
+(add-hook 'lisp-mode-hook #'linum-mode)
 (add-hook 'lisp-mode-hook #'paredit-mode)
 (add-hook 'lisp-mode-hook #'flycheck-mode)
 (add-hook 'lisp-mode-hook #'clisp-mappings)
@@ -245,10 +203,9 @@
 ;; Emacs Lisp settings
 
 (defun elisp-mappings ()
-  (evil-local-set-key 'normal (kbd "°") 'eval-buffer)
-  (evil-local-set-key 'normal (kbd "M-§") 'eval-buffer)
-  (evil-local-set-key 'normal (kbd "§") 'eval-defun)
-  (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp))
+  (define-key evil-normal-state-map (kbd "°") 'eval-buffer)
+  (define-key evil-normal-state-map (kbd "M-§") 'eval-buffer)
+  (define-key evil-normal-state-map (kbd "§") 'eval-defun))
 
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
@@ -258,20 +215,20 @@
 ;; Rust mappings
 
 (defun rust-mappings ()
-  (evil-local-set-key 'normal (kbd "Ö") 'racer-find-definition))
+  (define-key evil-normal-state-map (kbd "Ö") 'racer-find-definition))
 
 (add-hook 'rust-mode-hook #'racer-mode)
 (add-hook 'rust-mode-hook #'rust-mappings)
 (add-hook 'racer-mode-hook #'eldoc-mode)
 (add-hook 'racer-mode-hook #'company-mode)
-
+(require 'rust-mode)
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 (setq company-tooltip-align-annotations t)
 
 ;; Python
 
 (add-hook 'python-mode-hook #'flycheck-mode)
-;; (add-hook 'python-mode-hook #'linum-mode)
+(add-hook 'python-mode-hook #'linum-mode)
 
 ;; ReasonML
 
@@ -291,24 +248,12 @@
 ;; OCaml
 
 (defun ocaml-mappings ()
-  (evil-local-set-key 'normal (kbd "°") 'tuareg-eval-buffer)
-  (evil-local-set-key 'normal (kbd "M-§") 'tuareg-eval-buffer)
-  (evil-local-set-key 'normal (kbd "§") 'tuareg-eval-region))
+  (define-key evil-normal-state-map (kbd "°") 'tuareg-eval-buffer)
+  (define-key evil-normal-state-map (kbd "M-§") 'tuareg-eval-buffer)
+  (define-key evil-normal-state-map (kbd "§") 'tuareg-eval-region))
 
 (add-hook 'tuareg-mode-hook #'flycheck-mode)
 (add-hook 'tuareg-mode-hook #'ocaml-mappings)
-
-;; Neotree
-
-(evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
-(evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
-(evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
-(evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
-(evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
-(evil-define-key 'normal neotree-mode-map (kbd "n") 'neotree-next-line)
-(evil-define-key 'normal neotree-mode-map (kbd "p") 'neotree-previous-line)
-(evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
-(evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
 
 ;; (lsp-register-client
 ;;  (make-lsp-client
@@ -334,42 +279,10 @@
   :major-modes '(caml-mode tuareg-mode)
   :server-id 'ocamlmerlin-lsp))
 
-;;; esc quits
-
-(defun minibuffer-keyboard-quit ()
-  "Abort recursive edit.
-In Delete Selection mode, if the mark is active, just deactivate it;
-then it takes a second \\[keyboard-quit] to abort the minibuffer."
-  (interactive)
-  (if (and delete-selection-mode transient-mark-mode mark-active)
-      (setq deactivate-mark  t)
-    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-    (abort-recursive-edit)))
-(define-key evil-normal-state-map [escape] 'keyboard-quit)
-(define-key evil-visual-state-map [escape] 'keyboard-quit)
-(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-
-;; Remap org-mode meta keys for convenience
-(mapcar (lambda (state)
-          (evil-declare-key state org-mode-map
-            (kbd "M-l") 'org-metaright
-            (kbd "M-h") 'org-metaleft
-            (kbd "M-k") 'org-metaup
-            (kbd "M-j") 'org-metadown
-            (kbd "M-L") 'org-shiftmetaright
-            (kbd "M-H") 'org-shiftmetaleft
-            (kbd "M-K") 'org-shiftmetaup
-            (kbd "M-J") 'org-shiftmetadown))
-        '(normal insert))
-
 ;;
 
 (defun kill-magit-diff-buffer-in-current-repo (&rest _)
-  "Delete the magit-diff buffer related to the current repo."
+  "Delete the magit-diff buffer related to the current repo"
   (let ((magit-diff-buffer-in-current-repo
          (magit-mode-get-buffer 'magit-diff-mode)))
     (kill-buffer magit-diff-buffer-in-current-repo)))
@@ -392,6 +305,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (mapc #'kill-buffer buffers)))
 
   (bind-key "q" #'mu-magit-kill-buffers magit-status-mode-map))
+
+(defun enable-evil ()
+  (evil-mode 1))
 
 (evil-set-initial-state 'cider-repl-mode 'emacs)
 (add-hook 'cider-repl-mode-hook #'paredit-mode)
@@ -431,5 +347,3 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (setq-default evil-symbol-word-search t))
 
 (provide 'init-local)
-
-;;; init-local.el ends here
