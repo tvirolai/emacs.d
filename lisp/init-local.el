@@ -1,5 +1,6 @@
-;;; settings.el --- Custom personal settings
-;;
+;;; init-local.el --- Personal configuration -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (package-initialize)
 (require 'package)
@@ -130,8 +131,6 @@
 (setup-global-keys)
 
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-;; (add-hook 'prog-mode-hook #'whitespace-mode)
-;; (add-hook 'prog-mode-hook #'autopair-mode)
 
 (setup-input-decode-map)
 
@@ -284,7 +283,7 @@
 ;;
 
 (defun kill-magit-diff-buffer-in-current-repo (&rest _)
-  "Delete the magit-diff buffer related to the current repo"
+  "Delete the magit-diff buffer related to the current repo."
   (let ((magit-diff-buffer-in-current-repo
          (magit-mode-get-buffer 'magit-diff-mode)))
     (kill-buffer magit-diff-buffer-in-current-repo)))
@@ -349,3 +348,5 @@
   (setq-default evil-symbol-word-search t))
 
 (provide 'init-local)
+
+;;; init-local.el ends here
