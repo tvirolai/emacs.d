@@ -39,8 +39,6 @@
 (superword-mode 1)
 
 (add-to-list 'load-path "~/.emacs.d/evil")
-                                        ; (setq evil-disable-insert-state-bindings t)
-(key-chord-mode 1)
 (evil-mode 1)
 (evil-commentary-mode 1)
 (evil-visual-mark-mode 1)
