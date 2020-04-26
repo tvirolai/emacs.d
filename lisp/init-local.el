@@ -31,6 +31,9 @@
 (use-package autopair
   :ensure t)
 
+(use-package reason-mode
+  :ensure t)
+
 (require 'flycheck-clj-kondo)
 
 ;; (load-theme 'doom-gruvbox t)
