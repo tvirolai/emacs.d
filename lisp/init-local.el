@@ -38,12 +38,23 @@
 (use-package json-mode
   :ensure t)
 
+(use-package neotree
+  :ensure t)
+
+(use-package all-the-icons
+  :ensure t)
+
 (use-package restclient
   :ensure t
   :defer t
   :mode (("\\.http\\'" . restclient-mode))
   :bind (:map restclient-mode-map
               ("C-c C-f" . json-mode-beautify)))
+
+(require 'all-the-icons)
+
+;; On first install
+;; (all-the-icons-install-fonts)
 
 (require 'rust-mode)
 (require 'flycheck-clj-kondo)
@@ -89,6 +100,7 @@
   (define-key evil-normal-state-map (kbd "C-j") #'evil-window-down)
   (define-key evil-normal-state-map (kbd "C-k") #'evil-window-up)
   (define-key evil-normal-state-map (kbd "C-l") #'evil-window-right)
+  (define-key evil-normal-state-map (kbd "C-ö") #'neotree-toggle)
   (define-key evil-normal-state-map (kbd "Ö") 'xref-find-definitions)
   (define-key evil-normal-state-map (kbd "ä") #'delete-other-windows)
   (define-key evil-normal-state-map (kbd "C-ä") #'split-window-right)
@@ -256,6 +268,18 @@
 (add-hook 'tuareg-mode-hook #'flycheck-mode)
 (add-hook 'tuareg-mode-hook #'ocaml-mappings)
 
+;; Neotree
+
+(evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
+(evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
+(evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+(evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
+(evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
+(evil-define-key 'normal neotree-mode-map (kbd "n") 'neotree-next-line)
+(evil-define-key 'normal neotree-mode-map (kbd "p") 'neotree-previous-line)
+(evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
+(evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
+
 ;; (lsp-register-client
 ;;  (make-lsp-client
 ;;   :new-connection (lsp-stdio-connection
@@ -298,6 +322,19 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
+;; Remap org-mode meta keys for convenience
+(mapcar (lambda (state)
+          (evil-declare-key state org-mode-map
+            (kbd "M-l") 'org-metaright
+            (kbd "M-h") 'org-metaleft
+            (kbd "M-k") 'org-metaup
+            (kbd "M-j") 'org-metadown
+            (kbd "M-L") 'org-shiftmetaright
+            (kbd "M-H") 'org-shiftmetaleft
+            (kbd "M-K") 'org-shiftmetaup
+            (kbd "M-J") 'org-shiftmetadown))
+        '(normal insert))
 
 ;;
 
