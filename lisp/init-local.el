@@ -14,6 +14,11 @@
 (use-package flycheck-clj-kondo
   :ensure t)
 
+(use-package clojure-mode
+  :ensure t
+  :config
+  (require 'flycheck-clj-kondo))
+
 (use-package doom-themes
   :ensure t)
 
@@ -55,9 +60,11 @@
 
 ;; On first install
 ;; (all-the-icons-install-fonts)
+;; (require 'flycheck-clj-kondo)
+
+(desktop-save-mode-off)
 
 (require 'rust-mode)
-(require 'flycheck-clj-kondo)
 (require 'slime-autoloads)
 (require 'smex)
 
@@ -142,6 +149,8 @@
 
 (defun setup-global-keys ()
   (global-set-key (kbd "C-M-b") 'ibuffer)
+  (global-set-key (kbd "M-<right>") 'forward-word)
+  (global-set-key (kbd "M-<left>") 'backward-word)
   (global-set-key (kbd "´") 'kill-buffer)
   (global-set-key (kbd "C-M-y") 'reverse-transpose-sexps)
   (global-set-key "\C-x\ \C-r" 'recentf-open-files)
@@ -176,13 +185,21 @@
 
 ;; Clojure settings
 
+(defun clojure-linters ()
+  "Enable clj-kondo linters."
+  (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn
+                                   clojure-cider-kibit clojure-cider-eastwood))
+    (setq flycheck-checkers (cons checker (delq checker flycheck-checkers)))))
+
 (defun clojure-mappings ()
   (evil-local-set-key 'normal (kbd "°") 'cider-eval-buffer)
   (evil-local-set-key 'normal (kbd "M-§") 'cider-eval-buffer)
   (evil-local-set-key 'normal (kbd "§") 'cider-eval-defun-at-point)
   (evil-local-set-key 'normal (kbd "Ö") 'cider-find-var)
   (evil-local-set-key 'normal (kbd "q") 'cider-popup-buffer-quit)
-  (evil-local-set-key 'normal (kbd "K") 'cider-doc))
+  (evil-local-set-key 'normal (kbd "K") 'cider-doc)
+  (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp)
+  (clojure-linters))
 
 (add-hook 'clojure-mode-hook #'paredit-mode)
 (add-hook 'clojure-mode-hook #'subword-mode)
@@ -205,7 +222,8 @@
 (defun clisp-mappings ()
   (evil-local-set-key 'normal (kbd "°") 'slime-eval-buffer)
   (evil-local-set-key 'normal (kbd "M-§") 'slime-eval-buffer)
-  (evil-local-set-key 'normal (kbd "§") 'slime-eval-defun))
+  (evil-local-set-key 'normal (kbd "§") 'slime-eval-defun)
+  (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp))
 
 (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
 ;; (add-hook 'lisp-mode-hook #'linum-mode)
@@ -218,7 +236,8 @@
 (defun elisp-mappings ()
   (evil-local-set-key 'normal (kbd "°") 'eval-buffer)
   (evil-local-set-key 'normal (kbd "M-§") 'eval-buffer)
-  (evil-local-set-key 'normal (kbd "§") 'eval-defun))
+  (evil-local-set-key 'normal (kbd "§") 'eval-defun)
+  (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp))
 
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
