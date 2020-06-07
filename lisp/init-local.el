@@ -393,9 +393,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
   (bind-key "q" #'mu-magit-kill-buffers magit-status-mode-map))
 
-(defun enable-evil ()
-  (evil-mode 1))
-
 (evil-set-initial-state 'cider-repl-mode 'emacs)
 (add-hook 'cider-repl-mode-hook #'paredit-mode)
 (evil-set-initial-state 'cider-test-report-mode 'emacs)
