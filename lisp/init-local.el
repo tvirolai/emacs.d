@@ -56,6 +56,12 @@
   :bind (:map restclient-mode-map
               ("C-c C-f" . json-mode-beautify)))
 
+(use-package sparql-mode
+  :ensure t
+  :defer t
+  :mode (("\\.sparql$" . sparql-mode)
+         ("\\.rq$" . sparql-mode)))
+
 (use-package evil-org
   :ensure t
   :after org
@@ -91,7 +97,7 @@
 (prettify-symbols-mode 1)
 
 (setq inferior-lisp-program "/usr/local/bin/sbcl" ; Steel Bank Common Lisp
-      slime-contribs '(slime-fancy))
+      slime-contribs '(slime-fancy slime-asdf))
 
 (smex-initialize)
 
@@ -270,8 +276,13 @@
 
 ;; Python
 
+(defun python-mappings ()
+  (evil-local-set-key 'normal (kbd "°") 'python-shell-send-buffer)
+  (evil-local-set-key 'normal (kbd "M-§") 'python-shell-send-buffer)
+  (evil-local-set-key 'normal (kbd "§") 'python-shell-send-defun))
+
 (add-hook 'python-mode-hook #'flycheck-mode)
-;; (add-hook 'python-mode-hook #'linum-mode)
+(add-hook 'python-mode-hook #'python-mappings)
 
 ;; ReasonML
 
