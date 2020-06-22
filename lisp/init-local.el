@@ -196,7 +196,7 @@
 ;; Restclient settings
 
 (defun restclient-mappings ()
-  (evil-local-set-key 'normal (kbd "§") 'restclient-http-send-current))
+  (evil-local-set-key 'normal (kbd "§") 'restclient-http-send-current-stay-in-window))
 
 (add-hook 'restclient-mode-hook 'restclient-mappings)
 
@@ -376,6 +376,17 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
             (kbd "M-K") 'org-shiftmetaup
             (kbd "M-J") 'org-shiftmetadown))
         '(normal insert))
+
+(global-set-key (kbd "C-c c") 'org-capture)
+
+(setq org-default-notes-file "~/Dropbox/org/index.org")
+
+(setq org-agenda-files (list "~/Dropbox/org/index.org"))
+
+(global-set-key (kbd "C-c o")
+                (lambda ()
+                  (interactive)
+                  (find-file "~/Dropbox/org/organizer.org")))
 
 ;;
 
