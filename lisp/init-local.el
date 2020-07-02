@@ -73,6 +73,10 @@
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
+(use-package flx-ido
+  :ensure t
+  :after ido)
+
 (require 'all-the-icons)
 
 ;; On first install
@@ -184,7 +188,10 @@
 
 (add-hook 'tty-setup-hook #'setup-input-decode-map)
 
+;; Projectile settings
+
 (projectile-mode +1)
+(setq projectile-completion-system 'ido)
 (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
@@ -206,7 +213,12 @@
   "Enable clj-kondo linters."
   (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn
                                    clojure-cider-kibit clojure-cider-eastwood))
-    (setq flycheck-checkers (cons checker (delq checker flycheck-checkers)))))
+    (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
+  (dolist (checkers '((clj-kondo-clj . clojure-joker)
+                      (clj-kondo-cljs . clojurescript-joker)
+                      (clj-kondo-cljc . clojure-joker)
+                      (clj-kondo-edn . edn-joker)))
+    (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers)))))
 
 (defun clojure-mappings ()
   (evil-local-set-key 'normal (kbd "°") 'cider-eval-buffer)
