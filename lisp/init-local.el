@@ -112,7 +112,7 @@
 (setq undo-tree-auto-save-history t)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
-(setq default-frame-alist '((font . "Fira Code-13")))
+(setq default-frame-alist '((font . "Fira Code-15")))
 
 (ido-mode 1)
 (setq ido-everywhere t)
