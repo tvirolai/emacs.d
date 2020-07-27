@@ -81,7 +81,6 @@
 
 ;; On first install
 ;; (all-the-icons-install-fonts)
-;; (require 'flycheck-clj-kondo)
 
 (desktop-save-mode-off)
 
@@ -128,12 +127,12 @@
   (define-key evil-normal-state-map (kbd "C-j") #'evil-window-down)
   (define-key evil-normal-state-map (kbd "C-k") #'evil-window-up)
   (define-key evil-normal-state-map (kbd "C-l") #'evil-window-right)
-  (define-key evil-normal-state-map (kbd "C-ö") #'neotree-toggle)
+  (define-key evil-normal-state-map (kbd "C-ö") #'split-window-below)
   (define-key evil-normal-state-map (kbd "Ö") 'xref-find-definitions)
   (define-key evil-normal-state-map (kbd "ä") #'delete-other-windows)
   (define-key evil-normal-state-map (kbd "C-ä") #'split-window-right)
   (define-key evil-normal-state-map (kbd "ö") #'save-buffer)
-  (define-key evil-normal-state-map (kbd "C-p") #'projectile-find-file)
+  ;;(define-key evil-normal-state-map (kbd "C-p") #'projectile-find-file)
   (define-key evil-normal-state-map (kbd "Ä") #'projectile-ag)
   (define-key evil-normal-state-map (kbd "¨") #'evil-search-forward)
   (define-key evil-normal-state-map (kbd "TAB") #'switch-to-prev-buffer)
@@ -151,6 +150,7 @@
   (define-key input-decode-map (kbd "SPC c") (kbd "C-c"))
   (define-key input-decode-map (kbd "SPC f") (kbd "C-f"))
   (define-key input-decode-map (kbd "C-h") (kbd "C-x o"))
+  (define-key input-decode-map (kbd "C-p") #'projectile-find-file)
   (define-key input-decode-map (kbd "C-l") (kbd "C-x o"))
   (define-key input-decode-map (kbd "C-b") (kbd "C-x b"))
   (define-key input-decode-map (kbd "C-n") (kbd "C-x C-f"))
@@ -209,16 +209,16 @@
 
 ;; Clojure settings
 
-(defun clojure-linters ()
-  "Enable clj-kondo linters."
-  (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn
-                                   clojure-cider-kibit clojure-cider-eastwood))
-    (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
-  (dolist (checkers '((clj-kondo-clj . clojure-joker)
-                      (clj-kondo-cljs . clojurescript-joker)
-                      (clj-kondo-cljc . clojure-joker)
-                      (clj-kondo-edn . edn-joker)))
-    (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers)))))
+;; (defun clojure-linters ()
+;;   "Enable clj-kondo linters."
+;;   (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn
+;;                                    clojure-cider-kibit clojure-cider-eastwood))
+;;     (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
+;;   (dolist (checkers '((clj-kondo-clj . clojure-joker)
+;;                       (clj-kondo-cljs . clojurescript-joker)
+;;                       (clj-kondo-cljc . clojure-joker)
+;;                       (clj-kondo-edn . edn-joker)))
+;;     (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers)))))
 
 (defun clojure-mappings ()
   (evil-local-set-key 'normal (kbd "°") 'cider-eval-buffer)
@@ -227,8 +227,7 @@
   (evil-local-set-key 'normal (kbd "Ö") 'cider-find-var)
   (evil-local-set-key 'normal (kbd "q") 'cider-popup-buffer-quit)
   (evil-local-set-key 'normal (kbd "K") 'cider-doc)
-  (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp)
-  (clojure-linters))
+  (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp))
 
 (add-hook 'clojure-mode-hook #'paredit-mode)
 (add-hook 'clojure-mode-hook #'subword-mode)
