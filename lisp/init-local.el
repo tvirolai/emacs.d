@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(package-initialize)
+;; (package-initialize)
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -192,6 +192,7 @@
 
 (projectile-mode +1)
 (setq projectile-completion-system 'ido)
+(setq projectile-sort-order 'recently-active)
 (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
