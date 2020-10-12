@@ -18,9 +18,6 @@
   :config
   (turn-on-undo-tree-mode))
 
-(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
-
 (use-package tide
   :ensure t)
 
@@ -114,6 +111,9 @@
 (evil-commentary-mode 1)
 (evil-visual-mark-mode 1)
 (prettify-symbols-mode 1)
+
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
 
 (setq inferior-lisp-program "/usr/local/bin/sbcl" ; Steel Bank Common Lisp
       slime-contribs '(slime-fancy slime-asdf))
