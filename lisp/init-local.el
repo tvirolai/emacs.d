@@ -14,6 +14,13 @@
 (use-package flycheck-clj-kondo
   :ensure t)
 
+(use-package undo-tree
+  :config
+  (turn-on-undo-tree-mode))
+
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
+
 (use-package tide
   :ensure t)
 
@@ -97,6 +104,9 @@
 ;; (load-theme 'doom-gruvbox t)
 (load-theme 'doom-dracula t)
 
+;; An attempt to get rid of the "unrecognized entry in undo list undo-tree-canary" issue.
+;; (setq undo-tree-enable-undo-in-region nil)
+
 (superword-mode 1)
 
 (add-to-list 'load-path "~/.emacs.d/evil")
@@ -116,6 +126,8 @@
 
 (setq undo-tree-auto-save-history t)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+
+;; (setq evil-want-fine-undo t)
 
 (setq default-frame-alist '((font . "Fira Code-15")))
 
