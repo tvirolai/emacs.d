@@ -98,8 +98,8 @@
 (require 'slime-autoloads)
 (require 'smex)
 
-;; (load-theme 'doom-gruvbox t)
-(load-theme 'doom-dracula t)
+(load-theme 'doom-gruvbox t)
+;; (load-theme 'doom-dracula t)
 
 ;; An attempt to get rid of the "unrecognized entry in undo list undo-tree-canary" issue.
 ;; (setq undo-tree-enable-undo-in-region nil)
