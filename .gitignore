@@ -54,3 +54,4 @@ site-lisp/package/
 /.lsp-session-v1
 /games/
 /smex-items
+/eln-cache/
