@@ -24,6 +24,9 @@
 (use-package web-mode
   :ensure t)
 
+(use-package clj-refactor
+  :ensure t)
+
 (use-package clojure-mode
   :ensure t
   :config
@@ -206,6 +209,16 @@
 
 (add-hook 'tty-setup-hook #'setup-input-decode-map)
 
+;; Spell-check
+(require 'flyspell)
+(setq flyspell-issue-message-flag nil
+      ispell-local-dictionary "en_US"
+      ispell-program-name "aspell"
+      ispell-extra-args '("--sug-mode=ultra"))
+
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+
 ;; Projectile settings
 
 (projectile-mode +1)
@@ -248,11 +261,19 @@
   (evil-local-set-key 'normal (kbd "K") 'cider-doc)
   (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp))
 
-(add-hook 'clojure-mode-hook #'paredit-mode)
-(add-hook 'clojure-mode-hook #'subword-mode)
-(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
-(add-hook 'clojure-mode-hook #'flycheck-mode)
-(add-hook 'clojure-mode-hook #'clojure-mappings)
+(defun my-clojure-mode-hook ()
+  (clj-refactor-mode 1)
+  (yas-minor-mode 1) ; for adding require/use/import statements
+  ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+  (cljr-add-keybindings-with-prefix "C-c C-m")
+  (paredit-mode 1)
+  (subword-mode 1)
+  (aggressive-indent-mode 1)
+  (flycheck-mode 1)
+  (clojure-mappings)
+  (add-hook 'clojure-mode-hook #'clojure-mappings))
+
+(add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 
 ;; TypeScript settings
 
