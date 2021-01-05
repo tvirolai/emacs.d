@@ -216,8 +216,13 @@
       ispell-program-name "aspell"
       ispell-extra-args '("--sug-mode=ultra"))
 
-(add-hook 'text-mode-hook 'flyspell-mode)
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+
+(add-hook 'markdown-mode-hook 'whitespace-cleanup)
+(add-hook 'markdown-mode-hook 'flyspell-mode)
+
+(add-hook 'latex-mode-hook 'whitespace-cleanup)
+(add-hook 'latex-mode-hook 'flyspell-mode)
 
 ;; Projectile settings
 
