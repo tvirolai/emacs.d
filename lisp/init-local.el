@@ -56,12 +56,6 @@
 (use-package json-mode
   :ensure t)
 
-(use-package neotree
-  :ensure t)
-
-(use-package all-the-icons
-  :ensure t)
-
 (use-package restclient
   :ensure t
   :defer t
@@ -129,8 +123,6 @@
 
 (setq undo-tree-auto-save-history t)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
-
-;; (setq evil-want-fine-undo t)
 
 (setq default-frame-alist '((font . "Fira Code-15")))
 
@@ -221,8 +213,17 @@
 (add-hook 'markdown-mode-hook 'whitespace-cleanup)
 (add-hook 'markdown-mode-hook 'flyspell-mode)
 
+(defun latex-mappings ()
+  (evil-local-set-key 'normal (kbd "§") '(lambda ()
+                                           (interactive)
+                                           (shell-command "make")))
+  (evil-local-set-key 'normal (kbd "°") '(lambda ()
+                                           (interactive)
+                                           (shell-command "make && open thesis.pdf"))))
+
 (add-hook 'latex-mode-hook 'whitespace-cleanup)
 (add-hook 'latex-mode-hook 'flyspell-mode)
+(add-hook 'latex-mode-hook 'latex-mappings)
 
 ;; Projectile settings
 
@@ -401,18 +402,6 @@
 (add-hook 'tuareg-mode-hook #'flycheck-mode)
 (add-hook 'tuareg-mode-hook #'ocaml-mappings)
 
-;; Neotree
-
-(evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
-(evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
-(evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
-(evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
-(evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
-(evil-define-key 'normal neotree-mode-map (kbd "n") 'neotree-next-line)
-(evil-define-key 'normal neotree-mode-map (kbd "p") 'neotree-previous-line)
-(evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
-(evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
-
 ;; (lsp-register-client
 ;;  (make-lsp-client
 ;;   :new-connection (lsp-stdio-connection
@@ -468,6 +457,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
             (kbd "M-K") 'org-shiftmetaup
             (kbd "M-J") 'org-shiftmetadown))
         '(normal insert))
+
+(add-hook 'org-mode-hook #'(lambda ()
+                             ;; make the lines in the buffer wrap around the edges of the screen.
+                             ;; to press C-c q  or fill-paragraph ever again!
+                             (visual-line-mode)
+                             (org-indent-mode)))
 
 (global-set-key (kbd "C-c c") 'org-capture)
 
