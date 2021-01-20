@@ -5,7 +5,7 @@
 ;; (package-initialize)
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 
 (dolist (package '(use-package))
   (unless (package-installed-p package)
