@@ -84,16 +84,11 @@
   :ensure t
   :after ido)
 
-(require 'all-the-icons)
-
-;; On first install
-;; (all-the-icons-install-fonts)
-
 (desktop-save-mode-off)
 
 (require 'rust-mode)
 (require 'slime-autoloads)
-(require 'smex)
+;; (require 'smex)
 
 (load-theme 'doom-gruvbox t)
 ;; (load-theme 'doom-dracula t)
@@ -115,7 +110,7 @@
 (setq inferior-lisp-program "/usr/local/bin/sbcl" ; Steel Bank Common Lisp
       slime-contribs '(slime-fancy slime-asdf))
 
-(smex-initialize)
+;; (smex-initialize)
 
 (global-company-mode)
 
@@ -124,7 +119,7 @@
 (setq undo-tree-auto-save-history t)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
-(setq default-frame-alist '((font . "Fira Code-15")))
+(setq default-frame-alist '((font . "Fira Code-14")))
 
 (ido-mode 1)
 (setq ido-everywhere t)
@@ -188,8 +183,8 @@
   (global-set-key (kbd "´") 'kill-buffer)
   (global-set-key (kbd "C-M-y") 'reverse-transpose-sexps)
   (global-set-key "\C-x\ \C-r" 'recentf-open-files)
-  (global-set-key (kbd "M-x") 'smex)
-  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  ;; (global-set-key (kbd "M-x") 'smex)
+  ;; (global-set-key (kbd "M-X") 'smex-major-mode-commands)
   ;; This is your old M-x.
   (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command))
 
@@ -214,9 +209,6 @@
 (add-hook 'markdown-mode-hook 'flyspell-mode)
 
 (defun latex-mappings ()
-  (evil-local-set-key 'normal (kbd "§") '(lambda ()
-                                           (interactive)
-                                           (shell-command "make")))
   (evil-local-set-key 'normal (kbd "°") '(lambda ()
                                            (interactive)
                                            (shell-command "make && open thesis.pdf"))))
