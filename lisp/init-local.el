@@ -1,4 +1,4 @@
-;;; init-local.el --- Personal configuration -*- lexical-binding: t -*-
+;; init-local.el --- Personal configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -10,6 +10,8 @@
 (dolist (package '(use-package))
   (unless (package-installed-p package)
     (package-install package)))
+
+(setq evil-want-keybinding nil)
 
 (use-package flycheck-clj-kondo
   :ensure t)
@@ -36,6 +38,9 @@
   :ensure t)
 
 (use-package evil-commentary
+  :ensure t)
+
+(use-package evil-collection
   :ensure t)
 
 (use-package evil-visual-mark-mode
@@ -86,9 +91,11 @@
 
 (desktop-save-mode-off)
 
+(evil-collection-init 'eww)
+
 (require 'rust-mode)
 (require 'slime-autoloads)
-;; (require 'smex)
+(require 'smex)
 
 (load-theme 'doom-gruvbox t)
 ;; (load-theme 'doom-dracula t)
@@ -110,7 +117,7 @@
 (setq inferior-lisp-program "/usr/local/bin/sbcl" ; Steel Bank Common Lisp
       slime-contribs '(slime-fancy slime-asdf))
 
-;; (smex-initialize)
+(smex-initialize)
 
 (global-company-mode)
 
@@ -183,8 +190,8 @@
   (global-set-key (kbd "´") 'kill-buffer)
   (global-set-key (kbd "C-M-y") 'reverse-transpose-sexps)
   (global-set-key "\C-x\ \C-r" 'recentf-open-files)
-  ;; (global-set-key (kbd "M-x") 'smex)
-  ;; (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
   ;; This is your old M-x.
   (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command))
 
@@ -272,6 +279,15 @@
   (add-hook 'clojure-mode-hook #'clojure-mappings))
 
 (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
+
+
+;; EWW
+
+(defun eww-mappings ()
+  (evil-local-set-key 'normal (kbd "M-h") 'eww-back-url)
+  (evil-local-set-key 'normal (kbd "M-l") 'eww-forward-url))
+
+(add-hook 'eww-mode-hook #'eww-mappings)
 
 ;; TypeScript settings
 
