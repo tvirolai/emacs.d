@@ -11,6 +11,7 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+(setq evil-want-C-i-jump nil)
 (setq evil-want-keybinding nil)
 
 (use-package flycheck-clj-kondo
@@ -95,13 +96,9 @@
 
 (require 'rust-mode)
 (require 'slime-autoloads)
-;;(require 'smex)
 
 (load-theme 'doom-gruvbox t)
 ;; (load-theme 'doom-dracula t)
-
-;; An attempt to get rid of the "unrecognized entry in undo list undo-tree-canary" issue.
-;; (setq undo-tree-enable-undo-in-region nil)
 
 (superword-mode 1)
 
@@ -116,8 +113,6 @@
 
 (setq inferior-lisp-program "/usr/local/bin/sbcl" ; Steel Bank Common Lisp
       slime-contribs '(slime-fancy slime-asdf))
-
-;;(smex-initialize)
 
 (global-company-mode)
 
@@ -158,23 +153,15 @@
   (define-key evil-normal-state-map (kbd "ä") #'delete-other-windows)
   (define-key evil-normal-state-map (kbd "C-ä") #'split-window-right)
   (define-key evil-normal-state-map (kbd "ö") #'save-buffer)
-  ;;(define-key evil-normal-state-map (kbd "C-p") #'projectile-find-file)
   (define-key evil-normal-state-map (kbd "Ä") #'projectile-ag)
   (define-key evil-normal-state-map (kbd "¨") #'evil-search-forward)
-  (define-key evil-normal-state-map (kbd "TAB") #'switch-to-prev-buffer)
-  (define-key evil-normal-state-map (kbd "<backtab>") #'switch-to-next-buffer)
-  ;; (define-key evil-normal-state-map (kbd "´") #'kill-buffer)
   (define-key evil-normal-state-map (kbd "SPC ,") #'avy-goto-char)
   (define-key evil-normal-state-map (kbd "SPC .") #'avy-goto-char-2)
   (define-key evil-normal-state-map (kbd "SPC h") #'switch-to-prev-buffer)
   (define-key evil-normal-state-map (kbd "SPC l") #'switch-to-next-buffer)
-  (define-key evil-normal-state-map (kbd "Q") #'kill-buffer-and-window)
-  (define-key evil-normal-state-map (kbd "C-M-b") #'ibuffer))
+  (define-key evil-normal-state-map (kbd "Q") #'kill-buffer-and-window))
 
 (defun setup-input-decode-map ()
-  (define-key input-decode-map (kbd "SPC x") (kbd "C-x"))
-  (define-key input-decode-map (kbd "SPC c") (kbd "C-c"))
-  (define-key input-decode-map (kbd "SPC f") (kbd "C-f"))
   (define-key input-decode-map (kbd "C-h") (kbd "C-x o"))
   (define-key input-decode-map (kbd "C-p") #'projectile-find-file)
   (define-key input-decode-map (kbd "C-l") (kbd "C-x o"))
@@ -200,7 +187,10 @@
   (global-set-key (kbd "C-M-b") 'ibuffer)
   (global-set-key (kbd "M-<right>") 'forward-word)
   (global-set-key (kbd "M-<left>") 'backward-word)
+  (global-set-key (kbd "C-<tab>") #'switch-to-prev-buffer)
+  (global-set-key (kbd "<backtab>") #'switch-to-next-buffer)
   (global-set-key (kbd "´") 'kill-buffer)
+  (global-set-key (kbd "C-M-ä") 'kill-buffer-and-window)
   (global-set-key (kbd "C-M-y") 'reverse-transpose-sexps)
   (global-set-key "\C-x\ \C-r" 'recentf-open-files)
   ;; (global-set-key (kbd "M-x") 'smex)
@@ -259,17 +249,6 @@
 
 ;; Clojure settings
 
-;; (defun clojure-linters ()
-;;   "Enable clj-kondo linters."
-;;   (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn
-;;                                    clojure-cider-kibit clojure-cider-eastwood))
-;;     (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
-;;   (dolist (checkers '((clj-kondo-clj . clojure-joker)
-;;                       (clj-kondo-cljs . clojurescript-joker)
-;;                       (clj-kondo-cljc . clojure-joker)
-;;                       (clj-kondo-edn . edn-joker)))
-;;     (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers)))))
-
 (defun clojure-mappings ()
   (evil-local-set-key 'normal (kbd "°") 'cider-eval-buffer)
   (evil-local-set-key 'normal (kbd "M-§") 'cider-eval-buffer)
@@ -289,10 +268,19 @@
   (aggressive-indent-mode 1)
   (flycheck-mode 1)
   (clojure-mappings)
-  (add-hook 'clojure-mode-hook #'clojure-mappings))
+  ;;(add-hook 'clojure-mode-hook #'clojure-mappings)
+  )
 
 (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 
+;; (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn))
+;;   (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
+
+;; (dolist (checkers '((clj-kondo-clj . clojure-joker)
+;;                     (clj-kondo-cljs . clojurescript-joker)
+;;                     (clj-kondo-cljc . clojure-joker)
+;;                     (clj-kondo-edn . edn-joker)))
+;;   (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers))))
 
 ;; EWW
 
@@ -301,6 +289,7 @@
   (evil-local-set-key 'normal (kbd "M-l") 'eww-forward-url))
 
 (add-hook 'eww-mode-hook #'eww-mappings)
+(add-hook 'eww-mode-hook #'visual-line-mode)
 
 ;; TypeScript settings
 
@@ -361,6 +350,22 @@
 (add-hook 'lisp-mode-hook #'paredit-mode)
 (add-hook 'lisp-mode-hook #'flycheck-mode)
 (add-hook 'lisp-mode-hook #'clisp-mappings)
+
+;; Scheme settings
+
+(setq scheme-program-name "chez")
+
+(defun scheme-mappings ()
+  (evil-local-set-key 'normal (kbd "°") 'slime-eval-buffer)
+  (evil-local-set-key 'normal (kbd "M-§") 'slime-eval-buffer)
+  (evil-local-set-key 'normal (kbd "§") 'scheme-send-last-sexp)
+  (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp))
+
+(add-hook 'scheme-mode-hook #'aggressive-indent-mode)
+(add-hook 'scheme-mode-hook #'paredit-mode)
+(add-hook 'scheme-mode-hook #'flycheck-mode)
+(add-hook 'scheme-mode-hook #'scheme-mappings)
+
 
 ;; Emacs Lisp settings
 
@@ -466,23 +471,25 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
-;; Remap org-mode meta keys for convenience
-(mapcar (lambda (state)
-          (evil-declare-key state org-mode-map
-            (kbd "M-l") 'org-metaright
-            (kbd "M-h") 'org-metaleft
-            (kbd "M-k") 'org-metaup
-            (kbd "M-j") 'org-metadown
-            (kbd "M-L") 'org-shiftmetaright
-            (kbd "M-H") 'org-shiftmetaleft
-            (kbd "M-K") 'org-shiftmetaup
-            (kbd "M-J") 'org-shiftmetadown))
-        '(normal insert))
+(defun org-mode-remaps ()
+  ;; Remap org-mode meta keys for convenience
+  (mapcar (lambda (state)
+            (evil-declare-key state org-mode-map
+              (kbd "M-l") 'org-metaright
+              (kbd "M-h") 'org-metaleft
+              (kbd "M-k") 'org-metaup
+              (kbd "M-j") 'org-metadown
+              (kbd "M-L") 'org-shiftmetaright
+              (kbd "M-H") 'org-shiftmetaleft
+              (kbd "M-K") 'org-shiftmetaup
+              (kbd "M-J") 'org-shiftmetadown))
+          '(normal insert)))
 
 (add-hook 'org-mode-hook #'(lambda ()
                              ;; make the lines in the buffer wrap around the edges of the screen.
                              ;; to press C-c q  or fill-paragraph ever again!
                              (visual-line-mode)
+                             (org-mode-remaps)
                              (org-indent-mode)))
 
 (global-set-key (kbd "C-c c") 'org-capture)
@@ -528,7 +535,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-set-initial-state 'cider-test-report-mode 'emacs)
 (evil-set-initial-state 'slime-repl-mode 'emacs)
 (evil-set-initial-state 'eshell-mode 'emacs)
+(evil-set-initial-state 'inferior-scheme-mode 'emacs)
 (add-hook 'slime-repl-mode-hook #'paredit-mode)
+
+(evil-set-initial-state 'profiler-report-mode 'emacs)
 
 (add-hook 'json-mode-hook
           (lambda ()
