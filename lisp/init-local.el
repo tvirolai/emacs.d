@@ -189,17 +189,15 @@
 
 (add-hook 'tty-setup-hook #'setup-input-decode-map)
 
-;; Spell-check
-(require 'flyspell)
-(setq flyspell-issue-message-flag nil
-      ispell-local-dictionary "en_US"
-      ispell-program-name "aspell"
-      ispell-extra-args '("--sug-mode=ultra"))
-
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+;; ;; Spell-check
+;; (require 'flyspell)
+;; (setq flyspell-issue-message-flag nil
+;;       ispell-local-dictionary "en_US"
+;;       ispell-program-name "aspell"
+;;       ispell-extra-args '("--sug-mode=ultra"))
 
 (add-hook 'markdown-mode-hook 'whitespace-cleanup)
-(add-hook 'markdown-mode-hook 'flyspell-mode)
+;; (add-hook 'markdown-mode-hook 'flyspell-mode)
 
 (defun latex-mappings ()
   (evil-local-set-key 'normal (kbd "°") '(lambda ()
@@ -207,7 +205,6 @@
                                            (shell-command "make && open thesis.pdf"))))
 
 (add-hook 'latex-mode-hook 'whitespace-cleanup)
-(add-hook 'latex-mode-hook 'flyspell-mode)
 (add-hook 'latex-mode-hook 'latex-mappings)
 
 ;; Projectile settings
@@ -241,9 +238,18 @@
   (evil-local-set-key 'normal (kbd "K") 'cider-doc)
   (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp))
 
+(defun cider-custom-test-ns-fn (ns)
+  "Recognize namespaces (NS) with suffix -spec or -test as test namespaces."
+  (when ns
+    (cond ((string-match-p "-spec" ns) ns)
+          ((string-match-p "-test" ns) ns)
+          (t (concat ns "-test")))))
+
+(setq cider-test-infer-test-ns #'cider-custom-test-ns-fn)
+
 (defun my-clojure-mode-hook ()
   (clj-refactor-mode 1)
-  (yas-minor-mode 1) ; for adding require/use/import statements
+  (yas-minor-mode 1)        ; for adding require/use/import statements
   ;; This choice of keybinding leaves cider-macroexpand-1 unbound
   (cljr-add-keybindings-with-prefix "C-c C-m")
   (paredit-mode 1)
@@ -251,8 +257,7 @@
   (aggressive-indent-mode 1)
   (flycheck-mode 1)
   (clojure-mappings)
-  ;;(add-hook 'clojure-mode-hook #'clojure-mappings)
-  )
+  (lsp-mode 1))
 
 (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 
