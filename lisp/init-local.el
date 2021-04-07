@@ -121,6 +121,17 @@
 (setq undo-tree-auto-save-history t)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
+(defun scheme-mappings ()
+  (evil-local-set-key 'normal (kbd "°") 'scheme-send-region)
+  (evil-local-set-key 'normal (kbd "M-§") 'scheme-send-region)
+  (evil-local-set-key 'normal (kbd "§") 'scheme-send-last-sexp)
+  (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp))
+
+
+(add-hook 'scheme-mode-hook #'scheme-mappings)
+
+(set-variable (quote scheme-program-name) "guile")
+
 (setq default-frame-alist '((font . "Fira Code-14")))
 
 (ido-mode 1)
@@ -161,6 +172,8 @@
 
 (evil-set-initial-state 'term-mode 'emacs)
 
+(evil-set-initial-state 'inferior-scheme-mode 'emacs)
+
 (defun reverse-transpose-sexps (arg)
   (interactive "*p")
   (transpose-sexps (- arg))
@@ -179,7 +192,11 @@
   (global-set-key (kbd "´") 'kill-buffer)
   (global-set-key (kbd "C-M-ä") 'kill-buffer-and-window)
   (global-set-key (kbd "C-M-y") 'reverse-transpose-sexps)
-  (global-set-key "\C-x\ \C-r" 'recentf-open-files))
+  (global-set-key "\C-x\ \C-r" 'recentf-open-files)
+  ;; (global-set-key (kbd "M-x") 'smex)
+  ;; (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  ;; This is your old M-x.
+  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command))
 
 (setup-global-keys)
 
