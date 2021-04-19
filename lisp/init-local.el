@@ -124,13 +124,13 @@
 (defun scheme-mappings ()
   (evil-local-set-key 'normal (kbd "°") 'scheme-send-region)
   (evil-local-set-key 'normal (kbd "M-§") 'scheme-send-region)
-  (evil-local-set-key 'normal (kbd "§") 'scheme-send-last-sexp)
+  (evil-local-set-key 'normal (kbd "§") 'scheme-send-definition)
   (evil-local-set-key 'normal (kbd "DEL") 'paredit-splice-sexp))
 
 
 (add-hook 'scheme-mode-hook #'scheme-mappings)
 
-(set-variable (quote scheme-program-name) "guile")
+(set-variable (quote scheme-program-name) "mit-scheme")
 
 (setq default-frame-alist '((font . "Fira Code-14")))
 
@@ -278,8 +278,8 @@
 
 (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 
-;; (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn))
-;;   (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
+(dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn))
+  (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
 
 ;; (dolist (checkers '((clj-kondo-clj . clojure-joker)
 ;;                     (clj-kondo-cljs . clojurescript-joker)
@@ -358,7 +358,7 @@
 
 ;; Scheme settings
 
-(setq scheme-program-name "chez")
+(setq scheme-program-name "mit-scheme")
 
 (defun scheme-mappings ()
   (evil-local-set-key 'normal (kbd "°") 'slime-eval-buffer)
