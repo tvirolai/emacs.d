@@ -25,7 +25,10 @@
   :ensure t)
 
 (use-package web-mode
-  :ensure t)
+  :custom
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-code-indent-offset 2))
 
 (use-package clj-refactor
   :ensure t)
@@ -184,7 +187,7 @@
   (forward-sexp 1))
 
 (defun setup-global-keys ()
-  (global-set-key (kbd "C-M-b") 'ibuffer)
+  (define-key evil-normal-state-map (kbd "C-M-b") 'ibuffer)
   (global-set-key (kbd "M-<right>") 'forward-word)
   (global-set-key (kbd "M-<left>") 'backward-word)
   (global-set-key (kbd "C-<tab>") #'switch-to-prev-buffer)
@@ -273,8 +276,7 @@
   (subword-mode 1)
   (aggressive-indent-mode 1)
   (flycheck-mode 1)
-  (clojure-mappings)
-  (lsp-mode 1))
+  (clojure-mappings))
 
 (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 
@@ -432,13 +434,6 @@
 
 (add-hook 'tuareg-mode-hook #'flycheck-mode)
 (add-hook 'tuareg-mode-hook #'ocaml-mappings)
-
-;; (lsp-register-client
-;;  (make-lsp-client
-;;   :new-connection (lsp-stdio-connection
-;;                    '("opam" "exec" "--" "ocamlmerlin-lsp"))
-;;   :major-modes '(caml-mode tuareg-mode)
-;;   :server-id 'ocamlmerlin-lsp))
 
 (setq auto-mode-alist
       (append '(("\\.ml[ily]?$" . tuareg-mode)
