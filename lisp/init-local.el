@@ -4,6 +4,9 @@
 
 ;; (package-initialize)
 (require 'package)
+
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 
@@ -24,11 +27,11 @@
 (use-package tide
   :ensure t)
 
-(use-package web-mode
-  :custom
-  (web-mode-markup-indent-offset 2)
-  (web-mode-css-indent-offset 2)
-  (web-mode-code-indent-offset 2))
+; (use-package web-mode
+;   :custom
+;   (web-mode-markup-indent-offset 2)
+;   (web-mode-css-indent-offset 2)
+;   (web-mode-code-indent-offset 2))
 
 (use-package clj-refactor
   :ensure t)
@@ -56,8 +59,8 @@
 (use-package lsp-ui
   :ensure t)
 
-(use-package autopair
-  :ensure t)
+; (use-package autopair
+;   :ensure t)
 
 (use-package reason-mode
   :ensure t)
@@ -316,15 +319,15 @@
   (setq typescript-indent-level 2))
 
 ;; TSX
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-(add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "tsx" (file-name-extension buffer-file-name))
-              (setup-tide-mode))))
+; (require 'web-mode)
+; (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+; (add-hook 'web-mode-hook
+;           (lambda ()
+;             (when (string-equal "tsx" (file-name-extension buffer-file-name))
+;               (setup-tide-mode))))
 
 ;; enable typescript-tslint checker
-(flycheck-add-mode 'typescript-tslint 'web-mode)
+; (flycheck-add-mode 'typescript-tslint 'web-mode)
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
