@@ -27,11 +27,10 @@
 (use-package tide
   :ensure t)
 
-; (use-package web-mode
-;   :custom
-;   (web-mode-markup-indent-offset 2)
-;   (web-mode-css-indent-offset 2)
-;   (web-mode-code-indent-offset 2))
+(use-package anaconda-mode
+  :config
+  (add-hook 'python-mode-hook 'anaconda-mode)
+  (add-hook 'python-mode-hook 'eldoc-mode))
 
 (use-package clj-refactor
   :ensure t)
@@ -122,6 +121,9 @@
 
 (global-company-mode)
 
+(eval-after-load "company"
+  '(add-to-list 'company-backends 'company-anaconda))
+
 (global-undo-tree-mode)
 
 (setq undo-tree-auto-save-history t)
@@ -138,7 +140,16 @@
 
 (set-variable (quote scheme-program-name) "mit-scheme")
 
-(setq default-frame-alist '((font . "Fira Code-14")))
+(setq default-frame-alist '((font . "Fira Code-15")))
+                                        ; (setq default-frame-alist '((font . "JetBrains Mono-14")))
+
+;; Make Eshell autocompletion work as in Bash.
+(add-hook
+ 'eshell-mode-hook
+ (lambda ()
+   (setq pcomplete-cycle-completions nil)))
+
+(setq eshell-cmpl-cycle-completions nil)
 
 (ido-mode 1)
 (setq ido-everywhere t)
@@ -412,6 +423,7 @@
 
 (add-hook 'python-mode-hook #'flycheck-mode)
 (add-hook 'python-mode-hook #'python-mappings)
+(add-hook 'python-mode-hook 'anaconda-mode)
 
 ;; ReasonML
 
